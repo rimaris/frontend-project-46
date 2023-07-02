@@ -2,4 +2,11 @@
 
 import { program } from 'commander';
 
+program
+  .version('1.0.0')
+  .description('Compares two configuration files and shows a difference.')
+  .argument('<filepath1>')
+  .argument('<filepath2>')
+  .option('-f, --format', 'output format');
+
 program.parse();
