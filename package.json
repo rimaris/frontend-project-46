@@ -4,7 +4,7 @@
   "description": "[![Actions Status](https://github.com/rimaris/frontend-project-46/workflows/hexlet-check/badge.svg)](https://github.com/rimaris/frontend-project-46/actions)",
   "main": "bin/gendiff.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx jest"
   },
   "bin": {
     "gendiff": "bin/gendiff.js"
@@ -15,7 +15,9 @@
   "devDependencies": {
     "eslint": "^8.44.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.27.5"
+    "eslint-plugin-import": "^2.27.5",
+    "jest": "^29.7.0",
+    "@jest/globals": "^29.7.0"
   },
   "dependencies": {
     "commander": "^11.0.0",
