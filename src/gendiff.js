@@ -30,7 +30,7 @@ export const genDiff = (data1, data2) => {
   return result;
 };
 
-export const genDiffStr = (filepath1, filepath2) => {
+export const parseFilesAndPrintDiff = (filepath1, filepath2) => {
   const absolutePath1 = resolve(filepath1);
   const absolutePath2 = resolve(filepath2);
 
@@ -41,4 +41,4 @@ export const genDiffStr = (filepath1, filepath2) => {
   return `{\n${resultStr}\n}`;
 };
 
-export default genDiffStr;
+export default parseFilesAndPrintDiff;

@@ -2,7 +2,7 @@ import { test, expect } from '@jest/globals';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 
-import { genDiffStr } from '../src/gendiff';
+import { parseFilesAndPrintDiff } from '../src/gendiff';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -19,7 +19,7 @@ test('gendiff-json', () => {
   + verbose: true
 }`;
 
-  expect(genDiffStr(filepath1, filepath2)).toStrictEqual(expected);
+  expect(parseFilesAndPrintDiff(filepath1, filepath2)).toStrictEqual(expected);
 });
 
 test('gendiff-yaml', () => {
@@ -33,5 +33,5 @@ test('gendiff-yaml', () => {
   + timeout: 20
   + verbose: true
 }`;
-  expect(genDiffStr(filepath1, filepath2)).toStrictEqual(expected);
+  expect(parseFilesAndPrintDiff(filepath1, filepath2)).toStrictEqual(expected);
 });
