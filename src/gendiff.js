@@ -1,6 +1,7 @@
 import { resolve } from 'path';
 import parseFile from './parsers.js';
-import stylish from './formatters.js';
+import getFormatter from './formatters/index.js';
+
 import {
   KEY_UNCHANGED,
   KEY_ADDED,
@@ -67,14 +68,16 @@ export const genDiff = (data1, data2) => {
   return result;
 };
 
-export const parseFilesAndGenDiff = (filepath1, filepath2) => {
+export const parseFilesAndGenDiff = (filepath1, filepath2, format = 'stylish') => {
   const absolutePath1 = resolve(filepath1);
   const absolutePath2 = resolve(filepath2);
 
   const data1 = parseFile(absolutePath1);
   const data2 = parseFile(absolutePath2);
   const result = genDiff(data1, data2);
-  return stylish(result);
+
+  const formatter = getFormatter(format);
+  return formatter(result);
 };
 
 export default parseFilesAndGenDiff;

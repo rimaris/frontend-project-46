@@ -4,7 +4,7 @@ import {
   KEY_DELETED,
   KEY_UPDATED,
   KEY_NESTED_DIFF,
-} from './consts.js';
+} from '../consts.js';
 
 const formatLine = (idents, sign, key, value) => `${idents}${sign} ${key}: ${value}\n`;
 
@@ -53,6 +53,6 @@ const formatObjectDiff = (objectDiff, nestingLevel) => {
   return `{\n${result}${lastIdents}}`;
 };
 
-const stylish = (diff) => formatObjectDiff(diff, 0);
+const stylishFormatter = (diff) => formatObjectDiff(diff, 0);
 
-export default stylish;
+export default stylishFormatter;
