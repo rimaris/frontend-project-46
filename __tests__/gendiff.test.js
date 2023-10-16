@@ -24,10 +24,18 @@ test('gendiff-yaml', () => {
   expect(parseFilesAndGenDiff(filepath1, filepath2)).toStrictEqual(expected);
 });
 
-test('gendiff-json-plain', () => {
+test('gendiff-json-format-plain', () => {
   const filepath1 = `${__dirname}/../__fixtures__/file1.json`;
   const filepath2 = `${__dirname}/../__fixtures__/file2.json`;
   const expectedPath = `${__dirname}/../__fixtures__/file1_file2_diff_plain.txt`;
   const expected = readFileSync(expectedPath).toString();
   expect(parseFilesAndGenDiff(filepath1, filepath2, 'plain')).toStrictEqual(expected);
+});
+
+test('gendiff-json-format-json', () => {
+  const filepath1 = `${__dirname}/../__fixtures__/file1.json`;
+  const filepath2 = `${__dirname}/../__fixtures__/file2.json`;
+  const expectedPath = `${__dirname}/../__fixtures__/file1_file2_diff_json.txt`;
+  const expected = readFileSync(expectedPath).toString();
+  expect(parseFilesAndGenDiff(filepath1, filepath2, 'json')).toStrictEqual(expected);
 });
