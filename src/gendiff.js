@@ -1,6 +1,27 @@
 import { resolve } from 'path';
 import parseFile from './parsers.js';
+import stylish from './formatters.js';
+import {
+  KEY_UNCHANGED,
+  KEY_ADDED,
+  KEY_DELETED,
+  KEY_UPDATED,
+  KEY_NESTED_DIFF,
+} from './consts.js';
 
+/*
+{key2: "value2", }
+{key1: "value1"}
+
+TODO: изменить формат вывода функции. Сейчас функция выводит в формате
+['+ key1: "value1"', '- key2: "value2"', '  key3: "value3"']
+хотим сделать так, чтобы вывод был такой:
+ [
+   {sign: '+', second: "value1"},
+   {sign: '-', first: "value2"},
+   {sign: ' ', first: "value3", second: "value4"}
+ ]
+*/
 export const genDiff = (data1, data2) => {
   const keys1 = Object.keys(data1);
   const keys2 = Object.keys(data2);
@@ -13,32 +34,47 @@ export const genDiff = (data1, data2) => {
     if (i !== 0 && sortedKeys[i - 1] === key) {
       continue;
     }
+    const value1 = data1[key];
+    const value2 = data2[key];
     if (Object.prototype.hasOwnProperty.call(data1, key)
         && Object.prototype.hasOwnProperty.call(data2, key)) {
-      if (data1[key] === data2[key]) {
-        result.push(`  ${key}: ${data1[key]}`);
+      if (typeof value1 === 'object' && value1 !== null && typeof value2 === 'object' && value2 != null) {
+        result.push({
+          keyStatus: KEY_NESTED_DIFF,
+          key,
+          nestedDiff: genDiff(value1, value2),
+        });
+      } else if (value1 === value2) {
+        result.push({
+          keyStatus: KEY_UNCHANGED,
+          key,
+          first: value1,
+        });
       } else {
-        result.push(`- ${key}: ${data1[key]}`);
-        result.push(`+ ${key}: ${data2[key]}`);
+        result.push({
+          keyStatus: KEY_UPDATED,
+          key,
+          first: value1,
+          second: value2,
+        });
       }
     } else if (Object.prototype.hasOwnProperty.call(data1, key)) {
-      result.push(`- ${key}: ${data1[key]}`);
+      result.push({ keyStatus: KEY_DELETED, key, first: value1 });
     } else {
-      result.push(`+ ${key}: ${data2[key]}`);
+      result.push({ keyStatus: KEY_ADDED, key, second: value2 });
     }
   }
   return result;
 };
 
-export const parseFilesAndPrintDiff = (filepath1, filepath2) => {
+export const parseFilesAndGenDiff = (filepath1, filepath2) => {
   const absolutePath1 = resolve(filepath1);
   const absolutePath2 = resolve(filepath2);
 
   const data1 = parseFile(absolutePath1);
   const data2 = parseFile(absolutePath2);
   const result = genDiff(data1, data2);
-  const resultStr = result.map((x) => `  ${x}`).join('\n');
-  return `{\n${resultStr}\n}`;
+  return stylish(result);
 };
 
-export default parseFilesAndPrintDiff;
+export default parseFilesAndGenDiff;
