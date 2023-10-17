@@ -17,35 +17,27 @@ const formatValue = (value) => {
 };
 
 const getDiffLines = (diff, parents) => {
-  const lines = [];
-  let keyPrefix = '';
-  if (parents !== '') {
-    keyPrefix = `${parents}.`;
-  }
-  for (let i = 0; i < diff.length; i += 1) {
-    const currDiff = diff[i];
+  const keyPrefix = parents !== '' ? `${parents}.` : '';
+
+  const lines = diff.map((currDiff) => {
     if (currDiff.keyStatus === KEY_UNCHANGED) {
-      continue;
+      return '';
     }
     const key = `${keyPrefix}${currDiff.key}`;
     switch (currDiff.keyStatus) {
       case KEY_ADDED:
-        lines.push(`Property '${key}' was added with value: ${formatValue(currDiff.second)}`);
-        break;
+        return `Property '${key}' was added with value: ${formatValue(currDiff.second)}`;
       case KEY_DELETED:
-        lines.push(`Property '${key}' was removed`);
-        break;
+        return `Property '${key}' was removed`;
       case KEY_UPDATED:
-        lines.push(`Property '${key}' was updated. From ${formatValue(currDiff.first)} to ${formatValue(currDiff.second)}`);
-        break;
+        return `Property '${key}' was updated. From ${formatValue(currDiff.first)} to ${formatValue(currDiff.second)}`;
       case KEY_NESTED_DIFF:
-        lines.push(...getDiffLines(currDiff.nestedDiff, key));
-        break;
+        return getDiffLines(currDiff.nestedDiff, key);
       default:
         throw new Error(`unknown key status: ${currDiff.keyStatus}`);
     }
-  }
-  return lines;
+  });
+  return lines.filter((elem) => elem !== '').flat();
 };
 
 const plainFormatter = (diff) => getDiffLines(diff, '').join('\n');

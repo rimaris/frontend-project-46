@@ -10,13 +10,9 @@ const formatLine = (idents, sign, key, value) => `${idents}${sign} ${key}: ${val
 
 const formatValue = (val, nestingLevel) => {
   if (typeof val === 'object' && val !== null) {
-    let result = '';
-    const objectKeys = Object.keys(val).sort();
+    const objectKeys = Object.keys(val);
     const idents = ' '.repeat((nestingLevel + 1) * 4);
-    for (let i = 0; i < objectKeys.length; i += 1) {
-      const key = objectKeys[i];
-      result += `${idents}${key}: ${formatValue(val[key], nestingLevel + 1)}\n`;
-    }
+    const result = objectKeys.map((key) => `${idents}${key}: ${formatValue(val[key], nestingLevel + 1)}\n`).join('');
     const bracketIdents = ' '.repeat(nestingLevel * 4);
     return `{\n${result}${bracketIdents}}`;
   }
@@ -24,31 +20,27 @@ const formatValue = (val, nestingLevel) => {
 };
 
 const formatObjectDiff = (objectDiff, nestingLevel) => {
-  let result = '';
   const idents = ' '.repeat(nestingLevel * 4 + 2);
-  for (let i = 0; i < objectDiff.length; i += 1) {
-    const currDiff = objectDiff[i];
+  const lines = objectDiff.map((currDiff) => {
     switch (currDiff.keyStatus) {
       case KEY_UNCHANGED:
-        result += formatLine(idents, ' ', currDiff.key, formatValue(currDiff.first, nestingLevel + 1));
-        break;
+        return formatLine(idents, ' ', currDiff.key, formatValue(currDiff.first, nestingLevel + 1));
       case KEY_ADDED:
-        result += formatLine(idents, '+', currDiff.key, formatValue(currDiff.second, nestingLevel + 1));
-        break;
+        return formatLine(idents, '+', currDiff.key, formatValue(currDiff.second, nestingLevel + 1));
       case KEY_DELETED:
-        result += formatLine(idents, '-', currDiff.key, formatValue(currDiff.first, nestingLevel + 1));
-        break;
+        return formatLine(idents, '-', currDiff.key, formatValue(currDiff.first, nestingLevel + 1));
       case KEY_UPDATED:
-        result += formatLine(idents, '-', currDiff.key, formatValue(currDiff.first, nestingLevel + 1));
-        result += formatLine(idents, '+', currDiff.key, formatValue(currDiff.second, nestingLevel + 1));
-        break;
+        return [
+          formatLine(idents, '-', currDiff.key, formatValue(currDiff.first, nestingLevel + 1)),
+          formatLine(idents, '+', currDiff.key, formatValue(currDiff.second, nestingLevel + 1)),
+        ];
       case KEY_NESTED_DIFF:
-        result += formatLine(idents, ' ', currDiff.key, formatObjectDiff(currDiff.nestedDiff, nestingLevel + 1));
-        break;
+        return formatLine(idents, ' ', currDiff.key, formatObjectDiff(currDiff.nestedDiff, nestingLevel + 1));
       default:
         throw new Error(`Unknown key status: ${currDiff.keyStatus}`);
     }
-  }
+  });
+  const result = lines.flat().join('');
   const lastIdents = ' '.repeat(nestingLevel * 4);
   return `{\n${result}${lastIdents}}`;
 };
