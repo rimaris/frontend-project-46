@@ -3,7 +3,8 @@ import { load } from 'js-yaml';
 
 const parseFile = (filepath) => {
   const data = readFileSync(filepath);
-  const fileExt = filepath.split('.').pop();
+  const splitted = filepath.split('.');
+  const fileExt = splitted[splitted.length - 1];
 
   switch (fileExt) {
     case 'json':

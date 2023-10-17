@@ -14,7 +14,7 @@ const genDiff = (data1, data2) => {
   const keys1 = Object.keys(data1);
   const keys2 = Object.keys(data2);
   const allKeys = [...new Set(keys1.concat(keys2))];
-  const sortedKeys = allKeys.sort();
+  const sortedKeys = [...allKeys].sort();
 
   return sortedKeys.map((key) => {
     const value1 = data1[key];
