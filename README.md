@@ -9,5 +9,5 @@
 [![asciicast](https://asciinema.org/a/FDIiudqnZXc1jGD0JN98Itecm.svg)](https://asciinema.org/a/FDIiudqnZXc1jGD0JN98Itecm)
 ### Plain output format
 [![asciicast](https://asciinema.org/a/7kVmSanVf0kE6POwCkxhd9ULQ.svg)](https://asciinema.org/a/7kVmSanVf0kE6POwCkxhd9ULQ)
-### JSON outpu format
+### JSON output format
 [![asciicast](https://asciinema.org/a/t9ba7dlDw5ZidewDcFWwnANKS.svg)](https://asciinema.org/a/t9ba7dlDw5ZidewDcFWwnANKS)
