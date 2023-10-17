@@ -3,7 +3,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { readFileSync } from 'fs';
 
-import { parseFilesAndGenDiff } from '../src/gendiff';
+import parseFilesAndGenDiff from '../src/gendiff';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
