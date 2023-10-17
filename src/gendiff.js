@@ -23,7 +23,7 @@ TODO: изменить формат вывода функции. Сейчас ф
    {sign: ' ', first: "value3", second: "value4"}
  ]
 */
-export const genDiff = (data1, data2) => {
+const genDiff = (data1, data2) => {
   const keys1 = Object.keys(data1);
   const keys2 = Object.keys(data2);
   const allKeys = keys1.concat(keys2);
@@ -68,7 +68,7 @@ export const genDiff = (data1, data2) => {
   return result;
 };
 
-export const parseFilesAndGenDiff = (filepath1, filepath2, format = 'stylish') => {
+const parseFilesAndGenDiff = (filepath1, filepath2, format = 'stylish') => {
   const absolutePath1 = resolve(filepath1);
   const absolutePath2 = resolve(filepath2);
 
