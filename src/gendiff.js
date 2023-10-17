@@ -10,19 +10,6 @@ import {
   KEY_NESTED_DIFF,
 } from './consts.js';
 
-/*
-{key2: "value2", }
-{key1: "value1"}
-
-TODO: изменить формат вывода функции. Сейчас функция выводит в формате
-['+ key1: "value1"', '- key2: "value2"', '  key3: "value3"']
-хотим сделать так, чтобы вывод был такой:
- [
-   {sign: '+', second: "value1"},
-   {sign: '-', first: "value2"},
-   {sign: ' ', first: "value3", second: "value4"}
- ]
-*/
 const genDiff = (data1, data2) => {
   const keys1 = Object.keys(data1);
   const keys2 = Object.keys(data2);
